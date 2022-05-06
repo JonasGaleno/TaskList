@@ -1,0 +1,156 @@
+[gd_scene load_steps=28 format=2]
+
+[ext_resource path="res://Sprites/Calvin/Calvin_13.png" type="Texture" id=1]
+[ext_resource path="res://Sprites/Calvin/Calvin_ 8.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Calvin/Calvin_4.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Calvin/Calvin_ 9.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/Calvin/Calvin_ 10.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/Calvin/Calvin_ 11.png" type="Texture" id=6]
+[ext_resource path="res://Sprites/Calvin/Calvin_14.png" type="Texture" id=7]
+[ext_resource path="res://Sprites/Calvin/Calvin_ 5.png" type="Texture" id=8]
+[ext_resource path="res://Sprites/Calvin/Calvin_12.png" type="Texture" id=9]
+[ext_resource path="res://Sprites/Calvin/Calvin_15.png" type="Texture" id=10]
+[ext_resource path="res://Sprites/Calvin/Calvin_3.png" type="Texture" id=11]
+[ext_resource path="res://Sprites/Calvin/Calvin_ 7.png" type="Texture" id=12]
+[ext_resource path="res://Sprites/Calvin/Calvin_ 6.png" type="Texture" id=13]
+[ext_resource path="res://Sprites/Calvin/Calvin_2.png" type="Texture" id=14]
+[ext_resource path="res://Sprites/Calvin/Calvin_1.png" type="Texture" id=15]
+[ext_resource path="res://Scenes/Calvin.gd" type="Script" id=16]
+
+[sub_resource type="Animation" id=21]
+resource_name = "Idle"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 15 ), ExtResource( 14 ), ExtResource( 11 ), ExtResource( 3 ) ]
+}
+
+[sub_resource type="Animation" id=22]
+resource_name = "Jump"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 9 ), ExtResource( 1 ), ExtResource( 7 ), ExtResource( 10 ) ]
+}
+
+[sub_resource type="Animation" id=23]
+length = 0.001
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ null ]
+}
+
+[sub_resource type="Animation" id=24]
+resource_name = "Walk"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 8 ), ExtResource( 13 ), ExtResource( 12 ), ExtResource( 2 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ) ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeTransition" id=17]
+input_count = 2
+input_0/name = "Ground"
+input_0/auto_advance = false
+input_1/name = "Air"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "Jump"
+
+[sub_resource type="AnimationNodeTransition" id=19]
+input_count = 2
+input_0/name = "Idle"
+input_0/auto_advance = false
+input_1/name = "Walk"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=20]
+animation = "Walk"
+
+[sub_resource type="AnimationNodeBlendTree" id=25]
+graph_offset = Vector2( 0, 65.5 )
+nodes/idle/node = SubResource( 16 )
+nodes/idle/position = Vector2( -40, 60 )
+nodes/in_air/node = SubResource( 17 )
+nodes/in_air/position = Vector2( 440, 80 )
+nodes/jump/node = SubResource( 18 )
+nodes/jump/position = Vector2( 260, 240 )
+nodes/movement/node = SubResource( 19 )
+nodes/movement/position = Vector2( 180, 60 )
+nodes/output/position = Vector2( 720, 140 )
+nodes/walk/node = SubResource( 20 )
+nodes/walk/position = Vector2( -40, 220 )
+node_connections = [ "output", 0, "in_air", "in_air", 0, "movement", "in_air", 1, "jump", "movement", 0, "idle", "movement", 1, "walk" ]
+
+[sub_resource type="CapsuleShape2D" id=26]
+radius = 9.54064
+height = 20.805
+
+[node name="Calvin" type="KinematicBody2D"]
+script = ExtResource( 16 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -0.281089 )
+scale = Vector2( 0.359997, 0.363034 )
+texture = ExtResource( 10 )
+offset = Vector2( 2.7778, -19.4446 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Idle = SubResource( 21 )
+anims/Jump = SubResource( 22 )
+anims/RESET = SubResource( 23 )
+anims/Walk = SubResource( 24 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 25 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/in_air/current = 1
+parameters/movement/current = 0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1, 1 )
+scale = Vector2( 2.4, 1.6 )
+shape = SubResource( 26 )
